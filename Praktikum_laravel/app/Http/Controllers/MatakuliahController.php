@@ -3,38 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Matakuliah;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class MatakuliahController
+class MatakuliahController 
 {
-    // Menampilkan daftar mata kuliah beserta nama dosen pengampu
     public function index()
     {
-        $matakuliahs = Matakuliah::with('dosen')->get();
+        $matakuliahs = Matakuliah::all();
         return view('matakuliah.index', compact('matakuliahs'));
     }
 
-    // Menampilkan form tambah mata kuliah
     public function create()
     {
-        $dosens = User::all();
-        return view('matakuliah.create', compact('dosens'));
+        return view('matakuliah.create');
     }
 
-    // Menyimpan data menggunakan method create() Eloquent
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'kode_mk'   => 'required|unique:matakuliahs,kode_mk',
-            'nama_mk'   => 'required|string|max:255',
-            'sks'       => 'required|integer',
-            'semester'  => 'required|integer',
-            'dosen_id'  => 'required|exists:users,id',
-        ]);
+        Matakuliah::create($request->all());
+        return redirect()->route('matakuliah.index')->with('pesan', 'Mata kuliah berhasil ditambahkan');
+    }
 
-        Matakuliah::create($validated);
+    public function show(Matakuliah $matakuliah)
+    {
+        $matakuliah->load('nilai.mahasiswa');
+        return view('matakuliah.show', compact('matakuliah'));
+    }
 
-        return redirect()->route('matakuliah.index');
+    public function edit(Matakuliah $matakuliah)
+    {
+        return view('matakuliah.edit', compact('matakuliah'));
+    }
+
+    public function update(Request $request, Matakuliah $matakuliah)
+    {
+        $matakuliah->update($request->all());
+        return redirect()->route('matakuliah.index')->with('pesan', 'Mata kuliah berhasil diperbarui');
+    }
+
+    public function destroy(Matakuliah $matakuliah)
+    {
+        $matakuliah->delete();
+        return redirect()->route('matakuliah.index')->with('pesan', 'Mata kuliah berhasil dihapus');
     }
 }
