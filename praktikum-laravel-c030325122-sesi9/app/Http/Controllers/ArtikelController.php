@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Artikel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Http\Requests\UpdateArtikelRequest;
+
 
 class ArtikelController extends Controller
 {
@@ -21,12 +23,17 @@ class ArtikelController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'judul' => 'required|min:5|max:255',
+            'isi' => 'required|min:20',
+            'status' => 'required|in:draft,terbit',
+        ]);
         Artikel::create([
-            'user_id' => auth()->id() ?? 1, // Sementara default 1 sebelum autentikasi aktif
-            'judul' => $request->judul,
-            'slug' => Str::slug($request->judul),
-            'isi' => $request->isi,
-            'status' => $request->status,
+            'user_id' => auth()->id(),
+            'judul' => $validated['judul'],
+            'slug' => \Illuminate\Support\Str::slug($validated['judul']),
+            'isi' => $validated['isi'],
+            'status' => $validated['status'],
         ]);
 
         return redirect()->route('artikel.index')->with('pesan', 'Artikel berhasil ditambahkan');
@@ -42,11 +49,11 @@ class ArtikelController extends Controller
         return view('artikel.edit', compact('artikel'));
     }
 
-    public function update(Request $request, Artikel $artikel)
+    public function update(UpdateArtikelRequest $request, Artikel $artikel)
     {
         $artikel->update([
             'judul' => $request->judul,
-            'slug' => Str::slug($request->judul),
+            'slug' => \Illuminate\Support\Str::slug($request->judul),
             'isi' => $request->isi,
             'status' => $request->status,
         ]);

@@ -30,6 +30,10 @@
         <a href="{{ route('artikel.create') }}">+ Tambah Artikel</a>
     </nav>
 
+    <nav>
+    <a href="{{ route('artikel.index') }}">Kelola Artikel</a>
+    <!-- Tautan navigasi lainnya -->
+    </nav>
     <!-- Flash Message / Pesan Konfirmasi -->
     @if (session('pesan'))
         <div class="alert-success">

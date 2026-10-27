@@ -21,4 +21,9 @@ class Artikel extends Model
     {
         return $query->where('status', 'terbit');
     }
+
+    public function scopeDraft($query)
+    {
+    return $query->where('status', 'draft');
+    }
 }
