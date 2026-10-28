@@ -6,7 +6,7 @@ use App\Models\Artikel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\UpdateArtikelRequest;
-
+use App\Http\Requests\StoreArtikelRequest;
 
 class ArtikelController extends Controller
 {
@@ -46,11 +46,18 @@ class ArtikelController extends Controller
 
     public function edit(Artikel $artikel)
     {
+        if ($artikel->user_id !== auth()->id()) {
+        abort(403, 'Anda tidak memiliki hak akses untuk mengubah artikel ini.');
+        }
+
         return view('artikel.edit', compact('artikel'));
     }
 
     public function update(UpdateArtikelRequest $request, Artikel $artikel)
     {
+        if ($artikel->user_id !== auth()->id()) {
+        abort(403, 'Anda tidak memiliki hak akses untuk memperbarui artikel ini.');
+        }
         $artikel->update([
             'judul' => $request->judul,
             'slug' => \Illuminate\Support\Str::slug($request->judul),
@@ -63,6 +70,9 @@ class ArtikelController extends Controller
 
     public function destroy(Artikel $artikel)
     {
+        if ($artikel->user_id !== auth()->id()) {
+        abort(403, 'Anda tidak memiliki hak akses untuk menghapus artikel ini.');
+        }
         $artikel->delete();
 
         return redirect()->route('artikel.index')->with('pesan', 'Artikel berhasil dihapus');

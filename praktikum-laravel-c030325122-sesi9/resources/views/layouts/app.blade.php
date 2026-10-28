@@ -34,6 +34,24 @@
     <a href="{{ route('artikel.index') }}">Kelola Artikel</a>
     <!-- Tautan navigasi lainnya -->
     </nav>
+
+    <nav style="padding: 10px; background: #f3f4f6; margin-bottom: 20px;">
+        <a href="{{ route('artikel.index') }}">Artikel</a>
+    
+        @auth
+            <span style="margin-left: 20px;">Halo, {{ auth()->user()->name }}</span>
+            <form action="{{ route('logout') }}" method="POST" style="display:inline; margin-left: 10px;">
+                @csrf
+                <button type="submit" style="background: transparent; border: none; color: blue; cursor: pointer; text-decoration: underline;">Logout</button>
+            </form>
+        @else
+            <span style="margin-left: 20px;">
+                <a href="{{ route('login') }}">Login</a> | 
+                <a href="{{ route('register') }}">Daftar</a>
+            </span>
+        @endauth
+    </nav>
+
     <!-- Flash Message / Pesan Konfirmasi -->
     @if (session('pesan'))
         <div class="alert-success">
