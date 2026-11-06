@@ -48,18 +48,35 @@
             return d.innerHTML;
         }
 
+        // Fungsi pembantu untuk menentukan warna marker berdasarkan properti jenjang
+        function getWarnaMarker(jenjang) {
+            if (jenjang === 'SD') return '#ef4444';      // Merah
+            if (jenjang === 'SMP') return '#3b82f6';     // Biru
+            if (jenjang === 'SMA') return '#f6ff00';     // Kuning
+            if (jenjang === 'SMK') return '#f97316';     // Oranye
+            return '#000000';
+        }
+
         const lapisan = L.geoJSON(null, {
+            // Memodifikasi layer titik menjadi ikon divHTML berwana
+            pointToLayer: function (fitur, latlng) {
+                const warna = getWarnaMarker(fitur.properties.jenjang);
+                const markerStyle = `background-color: ${warna}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.5); display: inline-block;`;
+                
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="${markerStyle}"></div>`,
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+                
+                return L.marker(latlng, { icon: customIcon });
+            },
             onEachFeature: (fitur, layer) => {
+                // ... (Isi fungsi onEachFeature tetap sama persis seperti di modul)
                 const p = fitur.properties;
                 const [lng, lat] = fitur.geometry.coordinates;
-                layer.bindPopup(`
-                    <strong>${esc(p.nama)}</strong><br>
-                    NPSN: ${esc(p.npsn)}<br>
-                    ${esc(p.jenjang)} ${esc(p.status)}<br>
-                    ${esc(p.alamat)}, ${esc(p.kecamatan)}<br>
-                    Telp: ${esc(p.telepon) || '-'}<br>
-                    <small>Koordinat: ${lat}, ${lng}</small>
-                `);
+                layer.bindPopup(`<strong>${esc(p.nama)}</strong><br>NPSN: ${esc(p.npsn)}<br>${esc(p.jenjang)} ${esc(p.status)}<br><small>Koordinat: ${lat}, ${lng}</small>`);
             }
         }).addTo(map);
 

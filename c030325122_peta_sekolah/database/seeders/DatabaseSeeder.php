@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
     {
     //... kode bawaan Laravel tetap dibiarkan...
     $this->call(SekolahSeeder::class);
+    $this->call(UserSeeder::class);
     }
 }

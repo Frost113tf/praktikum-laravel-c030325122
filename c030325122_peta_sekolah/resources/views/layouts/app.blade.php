@@ -13,6 +13,12 @@
             <span class="font-bold">SIG Sekolah</span>
             <a href="{{ url('/') }}">Peta Publik</a>
             <a href="{{ route('admin.sekolah.index') }}">Data Sekolah</a>
+            @auth
+            <form method="POST" action="{{ route('logout') }}" class="ml-auto">
+                @csrf
+                <button class="underline">Keluar ({{ auth()->user()->name }})</button>
+            </form>
+            @endauth
         </div>
     </nav>
     <main class="max-w-6xl mx-auto px-4 py-6">
