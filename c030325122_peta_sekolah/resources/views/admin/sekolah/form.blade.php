@@ -90,7 +90,7 @@ $cls = 'w-full border rounded px-3 py-2';
                     class="px-5 py-2 bg-blue-700 text-white rounded">
                 Simpan
             </button>
-            <a href="{{ route('admin.sekolah.index') }}"
+            <a href="{{ route('dinas.sekolah.index') }}"
                class="px-5 py-2 bg-gray-300 rounded">Batal</a>
         </div>
     </div>

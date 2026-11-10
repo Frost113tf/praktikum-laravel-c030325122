@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-    //... kode bawaan Laravel tetap dibiarkan...
-    $this->call(SekolahSeeder::class);
-    $this->call(UserSeeder::class);
+    $this->call([
+        SekolahSeeder::class,
+        UserSeeder::class,
+    ]);
     }
 }

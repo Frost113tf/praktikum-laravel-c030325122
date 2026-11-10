@@ -21,6 +21,7 @@ $cls = 'w-full border rounded px-3 py-2';
             </label>
             <input type="text" id="{{ $name }}" name="{{ $name }}"
                    value="{{ old($name, $sekolah->$name) }}"
+                    @readonly($name === 'npsn' && auth()->user()->isSekolah())
                    class="{{ $cls }}">
             @error($name)
                 <p class="text-red-600 text-sm">{{ $message }}</p>
@@ -90,8 +91,9 @@ $cls = 'w-full border rounded px-3 py-2';
                     class="px-5 py-2 bg-blue-700 text-white rounded">
                 Simpan
             </button>
-            <a href="{{ route('admin.sekolah.index') }}"
-               class="px-5 py-2 bg-gray-300 rounded">Batal</a>
+            <a href="{{ auth()->user()->isDinas() ? 
+                route('dinas.sekolah.index') : route('dashboard') }}" 
+                class="px-5 py-2 bg-gray-300 rounded">Batal</a>
         </div>
     </div>
 </div>

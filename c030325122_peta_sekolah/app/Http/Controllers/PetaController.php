@@ -13,24 +13,27 @@ class PetaController extends Controller
 
     public function geojson(Request $request)
     {
-        $features = Sekolah::query()
-            ->when($request->jenjang, fn ($q,$j) => $q->where('jenjang',$j))
+        $features = Sekolah::with('profil')
+            ->when($request->jenjang, fn($q, $j) => $q->where('jenjang', $j))
             ->get()
-            ->map(fn ($s) => [
+            ->map(fn($s) => [
                 'type' => 'Feature',
                 'geometry' => [
                     'type' => 'Point',
-                    // GeoJSON: urutan [longitude, latitude]
-                    'coordinates' => [$s->longitude,$s->latitude],
+                    'coordinates' => [$s->longitude, $s->latitude],
                 ],
                 'properties' => [
-                    'npsn'      => $s->npsn,
-                    'nama'      => $s->nama,
-                    'jenjang'   => $s->jenjang,
-                    'status'    => $s->status,
-                    'alamat'    => $s->alamat,
-                    'kecamatan' => $s->kecamatan,
-                    'telepon'   => $s->telepon,
+                    'npsn'           => $s->npsn,
+                    'nama'           => $s->nama,
+                    'jenjang'        => $s->jenjang,
+                    'status'         => $s->status,
+                    'alamat'         => $s->alamat,
+                    'kecamatan'      => $s->kecamatan,
+                    'telepon'        => $s->telepon,
+                    'kepala_sekolah' => $s->profil?->kepala_sekolah,
+                    'akreditasi'     => $s->profil?->akreditasi,
+                    'jumlah_siswa'   => $s->profil?->jumlah_siswa,
+                    'jumlah_guru'    => $s->profil?->jumlah_guru,
                 ],
             ]);
 
