@@ -27,13 +27,20 @@
                 @if (auth()->user()->isSekolah() && auth()->user()->sekolah_id)
                     <a href="{{ route('sekolah.edit', auth()->user()->sekolah_id) }}">Sekolah Saya</a>
                 @endif
-                
                 <form method="POST" action="{{ route('logout') }}" class="ml-auto flex items-center gap-3">
                     @csrf
                     <span class="text-sm">
                         {{ auth()->user()->name }} ({{ auth()->user()->roleLabel() }})
                     </span>
-                    <button class="underline">Keluar</button>
+                    
+                    <!-- Tautan Ubah Kata Sandi ditambahkan di sini -->
+                    <a href="{{ route('password.edit') }}" class="text-sm underline border-r border-gray-400 pr-3 mr-1">Ubah Sandi</a>
+                    
+                    <button class="underline text-sm">Keluar</button>
+                </form>
+                    <span class="text-sm">
+                        {{ auth()->user()->name }} ({{ auth()->user()->roleLabel() }})
+                    </span>
                 </form>
             @endauth
         </div>
