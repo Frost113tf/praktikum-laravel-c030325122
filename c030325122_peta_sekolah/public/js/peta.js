@@ -21,14 +21,15 @@ const Peta = {
     },
  
     // Mengambil seluruh fitur (Feature) sekolah dari endpoint GeoJSON
-    async ambilSekolah(jenjang = '') {
-        const url = `${window.PETA_URL.data}?jenjang=${encodeURIComponent(jenjang)}`;
+    // Mengambil seluruh fitur (Feature) sekolah dari endpoint GeoJSON (dengan filter jenjang & status)
+    async ambilSekolah(jenjang = '', status = '') {
+        const url = `${window.PETA_URL.data}?jenjang=${encodeURIComponent(jenjang)}&status=${encodeURIComponent(status)}`;
         const respon = await fetch(url);
- 
+
         if (!respon.ok) {
             throw new Error('Gagal memuat data sekolah');
         }
- 
+
         const data = await respon.json();
         return data.features;
     },
