@@ -3,7 +3,6 @@
 node_modules
 vendor
 tests
-sig-sekolah-c030325122
 .env
 .env.*
 !.env.example
