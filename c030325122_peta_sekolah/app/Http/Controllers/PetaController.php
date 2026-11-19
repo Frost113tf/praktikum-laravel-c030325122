@@ -15,6 +15,7 @@ class PetaController extends Controller
     {
         $features = Sekolah::with('profil')
             ->when($request->jenjang, fn ($q, $j) => $q->where('jenjang', $j))
+            ->when($request->status, fn ($q, $s) => $q->where('status', $s)) // <-- Penambahan Filter Status
             ->get()
             ->map(fn ($s) => [
                 'type' => 'Feature',
@@ -36,7 +37,7 @@ class PetaController extends Controller
                     'jumlah_guru'    => $s->profil?->jumlah_guru,
                 ],
             ]);
-            
+
         return response()->json([
             'type'     => 'FeatureCollection',
             'features' => $features,
@@ -51,6 +52,7 @@ public function geojsonWilayah(Request $request)
 {
     $features = Sekolah::with('profil')
         ->when($request->jenjang, fn ($q, $j) => $q->where('jenjang', $j))
+        ->when($request->status, fn ($q, $s) => $q->where('status', $s))
         ->get()
         ->groupBy('kecamatan')
         ->map(function ($kelompok, $kecamatan) {
