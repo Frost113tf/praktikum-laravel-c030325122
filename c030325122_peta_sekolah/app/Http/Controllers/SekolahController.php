@@ -11,12 +11,12 @@ class SekolahController extends Controller
 {
     public function index(Request $request)
     {
-        $sekolahs = Sekolah::query()
+            $sekolahs = Sekolah::query()
             ->when($request->q, function ($query, $q) {
                 $query->where(function ($w) use ($q) {
-                    $w->where('nama', 'like', "%{$q}%")
-                      ->orWhere('npsn', 'like', "%{$q}%")
-                      ->orWhere('kecamatan', 'like', "%{$q}%");
+                    $w->whereLike('nama', "%{$q}%")
+                    ->orWhereLike('npsn', "%{$q}%")
+                    ->orWhereLike('kecamatan', "%{$q}%");
                 });
             })
             ->orderBy('nama')
